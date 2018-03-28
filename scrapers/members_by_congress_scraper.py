@@ -8,7 +8,7 @@ import csv
 logging = True
 writeResults = True
 
-outputFile = 'members_by_congress.csv'
+outputFile = '../data/members_by_congress.csv'
 results = [["id", "nafn", "fæðingardagur", "skammstöfun", "þing"]] #schema for csv file
 for congress in range(1, 149):
     obj = untangle.parse('http://www.althingi.is/altext/xml/thingmenn/?lthing=' + str(congress))

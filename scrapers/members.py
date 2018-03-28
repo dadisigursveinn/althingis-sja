@@ -8,7 +8,7 @@ import csv
 logging = True
 writeResults = True
 
-outputFile = 'members.csv'
+outputFile = '../data/members.csv'
 results = [["id", "nafn", "fæðingardagur"]] #schema for csv file
 obj = untangle.parse('http://www.althingi.is/altext/xml/thingmenn/')
 if(logging):

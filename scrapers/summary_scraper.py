@@ -3,7 +3,7 @@ import csv
 
 logging = False
 
-outputFile = 'summary.csv'
+outputFile = '../data/summary.csv'
 results = [["atkvæðagreiðslunúmer", "þing", "tími", "já", "nei", "greiðir ekki atkvæði"]] #schema for csv file
 for congress in range(115, 149):
     obj = untangle.parse('http://www.althingi.is/altext/xml/atkvaedagreidslur/?lthing=' + str(congress))

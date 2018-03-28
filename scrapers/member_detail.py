@@ -7,7 +7,7 @@ import csv
 logging = True
 writeResults = True
 
-outputFile = 'members_details.csv'
+outputFile = '../data/members_details.csv'
 results = []
 
 ids = [] # holds the ids of all members of congress

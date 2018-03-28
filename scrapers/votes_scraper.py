@@ -6,7 +6,7 @@ import csv
 logging = True
 writeResults = True
 
-outputFile = 'votes.csv'
+outputFile = '../data/votes.csv'
 results = [["atkvæðagreiðslunúmer", "þingnúmer", "málsnúmer", "málsheiti", "tími", "þingmaður", "atkvæði"]]
 votingNumbers = []
 totalVoteData = 0
