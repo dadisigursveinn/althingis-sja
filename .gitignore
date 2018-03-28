@@ -102,3 +102,4 @@ ENV/
 
 #csv
 *.csv
+.Rproj.user
