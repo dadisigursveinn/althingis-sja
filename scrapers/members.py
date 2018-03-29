@@ -9,7 +9,7 @@ logging = True
 writeResults = True
 
 outputFile = '../data/members.csv'
-results = [["id", "name", "dob"]] #schema for csv file
+results = [["member_id", "name", "dob"]] #schema for csv file
 obj = untangle.parse('http://www.althingi.is/altext/xml/thingmenn/')
 if(logging):
     print("Starting to fetch data")

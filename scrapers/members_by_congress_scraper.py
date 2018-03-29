@@ -9,7 +9,7 @@ logging = True
 writeResults = True
 
 outputFile = '../data/members_by_congress.csv'
-results = [["id", "name", "dob", "innitials", "congress"]] #schema for csv file
+results = [["member_id", "name", "dob", "innitials", "congress"]] #schema for csv file
 for congress in range(1, 149):
     obj = untangle.parse('http://www.althingi.is/altext/xml/thingmenn/?lthing=' + str(congress))
     if(logging):

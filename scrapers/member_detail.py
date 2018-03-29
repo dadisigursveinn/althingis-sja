@@ -8,7 +8,7 @@ logging = True
 writeResults = True
 
 outputFile = '../data/members_details.csv'
-results = [["id", "name", "congress", "type", "party_id", "constituency", "began", "ended"]]
+results = [["member_id", "name", "congress", "type", "party_id", "constituency", "began", "ended"]]
 
 ids = [] # holds the ids of all members of congress
 # we start by finding all id's used

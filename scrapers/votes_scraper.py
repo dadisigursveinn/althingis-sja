@@ -7,7 +7,7 @@ logging = False
 writeResults = True
 
 outputFile = '../data/votes.csv'
-results = [["vote_id", "congress", "topic_id", "topic", "time", "member", "vote"]]
+results = [["vote_id", "congress", "topic_id", "topic", "time", "member_id", "vote"]]
 votingNumbers = []
 totalVoteData = 0
 failed = 0
