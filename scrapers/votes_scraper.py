@@ -3,11 +3,11 @@ import csv
 
 # Scraper that fetches information about votes in congress
 
-logging = True
+logging = False
 writeResults = True
 
 outputFile = '../data/votes.csv'
-results = [["atkvæðagreiðslunúmer", "þingnúmer", "málsnúmer", "málsheiti", "tími", "þingmaður", "atkvæði"]]
+results = [["vote_id", "congress", "topic_id", "topic", "time", "member", "vote"]]
 votingNumbers = []
 totalVoteData = 0
 failed = 0
@@ -48,7 +48,7 @@ print("Finished fetching data on " + str(totalVoteData) + " failed fetching data
 
 if(writeResults):
     print('Writing to ' + outputFile)
-    summaryCSV = open(outputFile, 'w')
+    summaryCSV = open(outputFile, 'w', encoding="utf-8")
     with summaryCSV:
         writer = csv.writer(summaryCSV)
         writer.writerows(results)

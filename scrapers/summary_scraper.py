@@ -4,7 +4,7 @@ import csv
 logging = False
 
 outputFile = '../data/summary.csv'
-results = [["atkvæðagreiðslunúmer", "þing", "tími", "já", "nei", "greiðir ekki atkvæði"]] #schema for csv file
+results = [["vote_id", "congress", "time", "yes", "no", "did not vote"]] #schema for csv file
 for congress in range(115, 149):
     obj = untangle.parse('http://www.althingi.is/altext/xml/atkvaedagreidslur/?lthing=' + str(congress))
     if(logging):
@@ -42,7 +42,7 @@ for congress in range(115, 149):
     print('Data: ' + str(atkvaedagreidslukerfi) + ', skipped: ' + str(other) + ', failed: ' + str(failed))
 
 print('Writing to ' + outputFile)
-summaryCSV = open(outputFile, 'w')
+summaryCSV = open(outputFile, 'w', encoding="utf-8")
 with summaryCSV:
     writer = csv.writer(summaryCSV)
     writer.writerows(results)

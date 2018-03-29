@@ -9,7 +9,7 @@ logging = True
 writeResults = True
 
 outputFile = '../data/members_by_congress.csv'
-results = [["id", "nafn", "fæðingardagur", "skammstöfun", "þing"]] #schema for csv file
+results = [["id", "name", "dob", "innitials", "congress"]] #schema for csv file
 for congress in range(1, 149):
     obj = untangle.parse('http://www.althingi.is/altext/xml/thingmenn/?lthing=' + str(congress))
     if(logging):
@@ -24,7 +24,7 @@ for congress in range(1, 149):
         print("Fetched " + str(congressmen) + " members of congress.")
 if(writeResults):
     print('Writing to ' + outputFile)
-    summaryCSV = open(outputFile, 'w')
+    summaryCSV = open(outputFile, 'w', encoding="utf-8")
     with summaryCSV:
         writer = csv.writer(summaryCSV)
         writer.writerows(results)

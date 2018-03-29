@@ -8,7 +8,7 @@ logging = True
 writeResults = True
 
 outputFile = '../data/members_details.csv'
-results = []
+results = [["id", "name", "congress", "type", "party_id", "constituency", "began", "ended"]]
 
 ids = [] # holds the ids of all members of congress
 # we start by finding all id's used
@@ -49,7 +49,7 @@ if (logging):
 
 if(writeResults):
     print('Writing to ' + outputFile)
-    summaryCSV = open(outputFile, 'w')
+    summaryCSV = open(outputFile, 'w', encoding="utf-8")
     with summaryCSV:
         writer = csv.writer(summaryCSV)
         writer.writerows(results)

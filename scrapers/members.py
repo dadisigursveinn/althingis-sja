@@ -9,7 +9,7 @@ logging = True
 writeResults = True
 
 outputFile = '../data/members.csv'
-results = [["id", "nafn", "fæðingardagur"]] #schema for csv file
+results = [["id", "name", "dob"]] #schema for csv file
 obj = untangle.parse('http://www.althingi.is/altext/xml/thingmenn/')
 if(logging):
     print("Starting to fetch data")
@@ -27,7 +27,7 @@ if(logging):
 
 if(writeResults):
     print('Writing to ' + outputFile)
-    summaryCSV = open(outputFile, 'w')
+    summaryCSV = open(outputFile, 'w', encoding="utf-8")
     with summaryCSV:
         writer = csv.writer(summaryCSV)
         writer.writerows(results)
