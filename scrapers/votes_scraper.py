@@ -1,5 +1,6 @@
 import untangle
 import csv
+from dateutil.parser import parse
 
 # Scraper that fetches information about votes in congress
 
@@ -7,7 +8,14 @@ logging = False
 writeResults = True
 
 outputFile = '../data/votes.csv'
-results = [["vote_id", "congress", "topic_id", "topic", "time", "member_id", "vote"]]
+results = [["vote_id", "congress", "topic_id", "topic",
+            "vote_time_year",
+            "vote_time_month",
+            "vote_time_date",
+            "vote_time_hour",
+            "vote_time_minute",
+            "vote_time_second",
+            "member_id", "vote"]]
 votingNumbers = []
 totalVoteData = 0
 failed = 0
@@ -29,12 +37,18 @@ for vote in votingNumbers:
     obj = untangle.parse('http://www.althingi.is/altext/xml/atkvaedagreidslur/atkvaedagreidsla/?numer=' + str(vote))
     try:
         for member in obj.atkvæðagreiðsla.atkvæðaskrá.children:
+            vote_time = parse(obj.atkvæðagreiðsla.tími.cdata)
             results.append([
                 obj.atkvæðagreiðsla['atkvæðagreiðslunúmer'],
                 obj.atkvæðagreiðsla['þingnúmer'],
                 obj.atkvæðagreiðsla['málsnúmer'],
                 obj.atkvæðagreiðsla.mál.málsheiti.cdata,
-                obj.atkvæðagreiðsla.tími.cdata,
+                vote_time.strftime('%Y'),
+                vote_time.strftime('%m'),
+                vote_time.strftime('%d'),
+                vote_time.strftime('%H'),
+                vote_time.strftime('%M'),
+                vote_time.strftime('%S'),
                 member['id'],
                 member.atkvæði.cdata
                 ])
