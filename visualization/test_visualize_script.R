@@ -25,15 +25,40 @@ sum_party_votes <- votes_member %>%
   group_by(party_id) %>% 
   summarise(total_vote_count=n())
 
-party_votes <- merge(party_votes, sum_party_votes, by="party_id") %>%
-  mutate(percentage=(vote_count/total_vote_count))
+party_votes_details <- merge(party_votes, sum_party_votes, by="party_id") %>%
+  mutate(percentage=(vote_count/total_vote_count)) %>% 
+  mutate(did_vote=ifelse((vote == "já" | vote == "nei"), TRUE, FALSE))
 
-party_votes %>% 
+party_votes_details %>% 
+  group_by(party_id, abr, did_vote) %>% 
+  summarise(percentage=sum(percentage)) %>%
+  arrange(percentage) %>% 
+  ggplot() +
+  geom_bar(mapping = aes(x=abr, y=percentage, fill=did_vote),
+           stat="identity") +
+  theme_bw() +
+  theme(
+    axis.title.y = element_text(angle = 0,vjust=0.5)
+  ) +
+  labs(
+    title = "How often did members participate in votes",
+    subtitle="Data for session 148. Voting yes or no considered participation,\nnot voting or being absent count for no participation.",
+    y = "Participation",
+    x = "Party",
+    fill = "Did participate"
+  ) +
+  scale_fill_manual(values = c('#D55E00',
+                               '#009E73'))
+
+party_votes_details %>% 
   ggplot() +
   geom_bar(mapping = aes(x=vote, y=percentage, fill=abr),
            stat="identity",
            position=position_dodge()) +
   theme_bw() +
+  theme(
+    axis.title.y = element_text(angle = 0,vjust=0.5)
+  ) +
   labs(
     title = "Types of votes in session 148 by party",
     y = "Percent",
