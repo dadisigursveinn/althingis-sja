@@ -50,7 +50,7 @@ for congress in range(115, 149):
     if(logging):
         print("Finished fetching results from votes in congress " + str(congress))
         print("Successfully fetched summaries for " + str(atkvaedagreidslukerfi) + " votes in atkvæðagreiðslukerfi")
-        print("There vere " + str(other) + " other votes, which data was not collected on.")
+        print("There were " + str(other) + " other votes, which data was not collected on.")
         print("Data collection failed for " + str(failed) + " votes.")
     print("Finished collecting data for Þing " + str(congress))
     print('Data: ' + str(atkvaedagreidslukerfi) + ', skipped: ' + str(other) + ', failed: ' + str(failed))
