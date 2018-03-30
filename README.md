@@ -3,7 +3,7 @@ Verkefnið snýst um að ná í gögn úr [opnum gögnum Alþingis](http://www.a
 
 # Þing sem skoðuð eru
 
-## Síðari hluti 9. áratugarins
+## Síðari hluti 10. áratugarins
 
 *Þingnúmer: Tímabil*
 
@@ -19,7 +19,7 @@ Verkefnið snýst um að ná í gögn úr [opnum gögnum Alþingis](http://www.a
 
 \#125: 1999 – 2000
 
-## 10. áratugurinn
+## 11. áratugurinn
 
 *Þingnúmer: Tímabil*
 
