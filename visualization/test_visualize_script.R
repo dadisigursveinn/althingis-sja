@@ -23,7 +23,7 @@ votes_member %>%
   scale_x_continuous(breaks=seq(7,24,by=1))+
   theme_bw()+
   labs(
-    title = "How members vote throughout the day",
+    title = "How Members Vote Throughout the Day",
     subtitle="Data for session 148.",
     y = "",
     x = "Time of Day",
@@ -57,10 +57,10 @@ votes_member %>%
            position=position_dodge()) +
   theme_bw()+
   labs(
-    title = "How members vote throughout the day",
+    title = "How Members Vote Throughout the Day",
     subtitle="Data for session 148. Log10 scale",
     y = "Count",
-    x = "Hour",
+    x = "Time of Day",
     fill = "Vote"
   ) +
   scale_fill_manual(values = c('#999999',
@@ -95,11 +95,11 @@ party_votes_details %>%
     axis.title.y = element_text(angle = 0,vjust=0.5)
   ) +
   labs(
-    title = "How often did members participate in votes",
+    title = "How Often Did Members Participate in Votes?",
     subtitle="Data for session 148. Voting yes or no considered participation,\nnot voting or being absent count for no participation.",
     y = "Participation",
     x = "Party",
-    fill = "Did participate"
+    fill = "Did Participate"
   ) +
   scale_fill_manual(values = c('#D55E00',
                                '#009E73'))
@@ -114,7 +114,7 @@ party_votes_details %>%
     axis.title.y = element_text(angle = 0,vjust=0.5)
   ) +
   labs(
-    title = "Types of votes in session 148 by party",
+    title = "Types of Votes In Session 148 by Party",
     y = "Percent",
     x = "Vote",
     fill = "Party"
