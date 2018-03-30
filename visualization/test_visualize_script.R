@@ -35,16 +35,39 @@ votes_member %>%
                                '#009E73',
                                '#D55E00'))
 
-# WIP
-votes_member %>% 
-  group_by(vote, vote_time_hour) %>% 
-  summarise(count=n()) %>% 
-  mutate(perc=count/sum(count)) %>% 
+votes_member %>%
+  mutate(vote_time_hour=ifelse((vote_time_hour == 0), 24, vote_time_hour)) %>% 
   ggplot() +
-  scale_y_continuous(breaks = c(0, 0.25, 0.5, 0.75, 1), labels = scales::percent(c(0, 0.25, 0.5, 0.75, 1))) +
-  geom_bar(mapping = aes(x=vote_time_hour, y=perc, fill=vote),
-           stat="identity",
-           position=position_dodge())
+  scale_x_continuous(breaks=seq(7,24,by=1))+
+  scale_y_log10(breaks = c(0,
+                           2,
+                           1,
+                           5,
+                           10,
+                           20,
+                           50,
+                           100,
+                           250,
+                           500,
+                           1000,
+                           2000,
+                           3000),
+                label = comma, minor_breaks=0)+
+  geom_bar(mapping = aes(x=vote_time_hour, fill=vote),
+           position=position_dodge()) +
+  theme_bw()+
+  labs(
+    title = "How members vote throughout the day",
+    subtitle="Data for session 148. Log10 scale",
+    y = "Count",
+    x = "Hour",
+    fill = "Vote"
+  ) +
+  scale_fill_manual(values = c('#999999',
+                               '#666666',
+                               '#F0E442',
+                               '#009E73',
+                               '#D55E00'))
 
 party_votes <- votes_member %>% 
   select(party_id, party_name, abr, vote_id, vote) %>% 
