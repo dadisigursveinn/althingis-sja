@@ -26,7 +26,7 @@ votes_member %>%
     title = "How members vote throughout the day",
     subtitle="Data for session 148.",
     y = "",
-    x = "Hour",
+    x = "Time of Day",
     fill = "Vote"
   ) +
   scale_fill_manual(values = c('#999999',
