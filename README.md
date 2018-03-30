@@ -21,6 +21,8 @@ Verkefnið snýst um að ná í gögn úr [opnum gögnum Alþingis](http://www.a
 
 ## 10. áratugurinn
 
+*Þingnúmer: Tímabil*
+
 \#126: 2000 – 2001
 
 \#127: 2001 – 2002
@@ -48,6 +50,8 @@ Verkefnið snýst um að ná í gögn úr [opnum gögnum Alþingis](http://www.a
 \#138: 2009 – 2010
 
 ## Áratugurinn sem er að líða
+
+*Þingnúmer: Tímabil*
 
 \#139: 2010 – 2011
 
