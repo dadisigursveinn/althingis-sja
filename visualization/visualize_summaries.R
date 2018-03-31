@@ -1,3 +1,4 @@
+install.packages("scales")
 library(tidyverse)
 library(scales)
 library(rvest)
@@ -6,7 +7,7 @@ library(readr)
 
 votes <- read_csv("../data/votes.csv")
 members <- read_csv("../data/members_details.csv") %>% 
-  filter(congress == 148) %>% 
+  filter(congress >= 116) %>% 
   select(member_id, name, party_id, congress) %>% 
   distinct
 parties <- read_csv("../data/parties.csv", na="") %>% 
