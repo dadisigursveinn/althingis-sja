@@ -55,7 +55,7 @@ def collectVoteInfo (votingNumbers, congress):
                 print("Could not fetch data on vote " + str(vote))
                 print(e)
     if(writeResults):
-        outputFile = outputdir + 'votes_' + str(congress)
+        outputFile = outputdir + 'votes_' + str(congress) + '.csv'
         print('Writing to ' + outputFile)
         summaryCSV = open(outputFile, 'w', encoding="utf-8")
         with summaryCSV:
