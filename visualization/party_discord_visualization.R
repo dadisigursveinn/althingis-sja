@@ -32,7 +32,13 @@ votes <- read_csv("../data/votes.csv") %>%
 members <- read_csv("../data/members_details.csv") %>%
   select(member_id, party_id, congress) %>% distinct
 
-votesByParty <- merge(members, votes, by = c("member_id", "congress"))
+votesPerIssue <- (merge(members, votes, by = c("member_id", "congress"))  %>%
+  select(party_id, vote_id, vote))
 
-votesByParty %>% 
-  filter(vote_id == 54952)
+votesPerIssue
+
+party_vote_summary <- summarise(group_by(votesPerIssue, party_id, vote_id, vote), number_of_votes = n())
+
+party_vote_summary
+
+filter(party_vote_summary, vote_id == 54781 )
