@@ -102,3 +102,5 @@ ENV/
 
 # R
 .Rproj.user
+
+visualization/.Rhistory
