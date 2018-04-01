@@ -67,8 +67,18 @@ def collectVoteInfo (votingNumbers, congress):
 # fetching voting numbers
 if (logging):
     print("Fetching voting numbers")
-for congress in range(144, 149):
+for congress in range(117, 149):
     votingNumbers = []
+    del results[:]
+    results = [["vote_id", "congress", "topic_id", "topic",
+            "vote_time_year",
+            "vote_time_month",
+            "vote_time_date",
+            "vote_time_hour",
+            "vote_time_minute",
+            "vote_time_second",
+            "member_id", "vote"]]
+    del votingNumbers[:]
     obj = untangle.parse('http://www.althingi.is/altext/xml/atkvaedagreidslur/?lthing=' + str(congress))
     for vote in obj.atkvæðagreiðslur.children:
         votingNumbers.append(vote['atkvæðagreiðslunúmer'])
