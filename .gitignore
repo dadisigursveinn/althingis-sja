@@ -102,3 +102,4 @@ ENV/
 
 # R
 .Rproj.user
+data/votes/votes_121-148.csv
