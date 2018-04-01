@@ -102,5 +102,7 @@ ENV/
 
 # R
 .Rproj.user
+<<<<<<< HEAD
 
 visualization/.Rhistory
+data/votes/votes_121-148.csv

@@ -62,6 +62,8 @@ all_votes <- Reduce(function(x,y) merge(x,y, all=TRUE), list(votes121,
                                                              votes147,
                                                              votes148))
 
+write.csv(all_votes, file="../data/votes/votes_121-148.csv", fileEncoding="UTF-8")
+
 all_votes %>%
   filter(vote != "f. 'óþekktur kóði") %>% 
   ggplot() +
