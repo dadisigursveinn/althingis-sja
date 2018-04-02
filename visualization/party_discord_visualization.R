@@ -3,7 +3,7 @@ library(scales)
 library(rvest)
 library(lubridate)
 library(readr)
-
+library(data.table)
 # This formula 'voteDiscord' measures the level of discord on a scale of 0 to 1.
 # It does not take into account abstaining votes.
 
@@ -22,10 +22,6 @@ library(readr)
 # Medium discord would be a fourth of the party disagrees
 # Example: voteDiscord(25.0, 75.0, 100.0) -> Discord of 0.5
 
-# def voteDiscord(yes, no, numberOfVotes)
-# return (numberOfVotes - (yes - no).abs) / numberOfVotes
-# end
-
 votes <- read_csv("../data/votes.csv") %>% 
   select(member_id, vote_id, vote, congress )
 
@@ -35,25 +31,30 @@ members <- read_csv("../data/members_details.csv") %>%
 votesPerIssue <- (merge(members, votes, by = c("member_id", "congress"))  %>%
   select(party_id, vote_id, vote))
 
-# *party_id vote_id vote vote_count*
-party_vote_summary <- summarise(group_by(votesPerIssue, party_id, vote_id, vote), vote_count = n())
+summarizePartyVotes <- function(votesPerIssue) {
+  summary_of_how_parties_voted <- summarise(group_by(votesPerIssue, party_id, vote_id, vote), vote_count = n())
+  summary_of_how_parties_voted <- filter(summary_of_how_parties_voted, vote %in% c("já", "nei"))
+  data <- filter(summary_of_how_parties_voted, party_id == 43)
+  data$ja <- ifelse(data$vote == "já", data$vote_count, 0)
+  data$nei <- ifelse(data$vote == "nei", data$vote_count, 0)
+  data <- select(data, "party_id", "vote_id", "ja", "nei")
+  DT <- data.table(data)
+  return(DT[, lapply(.SD, sum), by=list(vote_id)]);
+}
 
-party_vote_summary
-
-# some_voting_session <- filter(party_vote_summary, vote_id == 54788)
-# votes_of_some_party <- filter(some_voting_session, party_id == 43, vote %in% c("já", "nei"))
-# votes_of_some_party
+summarizePartyVotes(votesPerIssue)
+#partyDiscord(hello)
 
 # Takes votes of some party in a particular voting session and returns discord for that session.
-# Input: *party_id vote_id vote vote_count* 
-# Output: Discord value from 0.0 to 1.0
-# Example: partyDiscord(votes_of_some_party) # => 0.44
-partyDiscord <- function(votes_of_some_party) {
+# Input: <table> *party_id vote_id vote vote_count* 
+# Output: <float> Discord value from 0.0 to 1.0
+# Example: partyDiscord(party_votes_for_a_session) # => 0.44
+partyDiscord <- function(party_votes_for_a_session) {
   number_of_yes <- 0;
   number_of_no <- 0;
   
-  for(i in 1:nrow(votes_of_some_party)) {
-    ifelse (votes_of_some_party[i, "vote"] == "já", number_of_yes <- votes_of_some_party[i, "vote_count"], number_of_no <- votes_of_some_party[i, "vote_count"]);    
+  for(i in 1:nrow(party_votes_for_a_session)) {
+    ifelse (party_votes_for_a_session[i, "vote"] == "já", number_of_yes <- party_votes_for_a_session[i, "vote_count"], number_of_no <- party_votes_for_a_session[i, "vote_count"]);    
   }
   total_votes <- number_of_yes + number_of_no;
   discord <- abs(total_votes - abs(number_of_yes - number_of_no)) / total_votes;
