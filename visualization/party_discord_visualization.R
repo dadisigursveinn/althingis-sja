@@ -33,7 +33,7 @@ votesPerIssue <- (merge(members, votes, by = c("member_id", "congress"))  %>%
 
 summarizePartyVotes <- function(votesPerIssue) {
   data <- summarise(group_by(votesPerIssue, party_id, vote_id, vote), vote_count = n());
-  data <- filter(summary_of_how_parties_voted, vote %in% c("já", "nei"));
+  data <- filter(data, vote %in% c("já", "nei"));
   #data <- filter(summary_of_how_parties_voted, party_id == 43);
   data$ja <- ifelse(data$vote == "já", data$vote_count, 0);
   data$nei <- ifelse(data$vote == "nei", data$vote_count, 0);
@@ -51,6 +51,5 @@ partyDiscord <- function(yes, no) {
 }
 party_votes_summary$party_discord <- partyDiscord(party_votes_summary$ja, party_votes_summary$nei);
 
-party_votes_summary
 DT <- data.table(party_votes_summary);
 average_party_discord_by_party <- DT[,list(party_discord=mean(party_discord)),by=list(party_id)];
