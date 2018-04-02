@@ -39,7 +39,7 @@ summarizePartyVotes <- function(votesPerIssue) {
   data$nei <- ifelse(data$vote == "nei", data$vote_count, 0);
   data <- select(data, "party_id", "vote_id", "ja", "nei");
   DT <- data.table(data);
-  
+  return(DT[,list(ja=sum(ja),nei=sum(nei)),by=list(party_id, vote_id)]);
 }
 
 party_votes_summary <- summarizePartyVotes(votesPerIssue)
