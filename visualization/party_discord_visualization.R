@@ -32,14 +32,14 @@ votesPerIssue <- (merge(members, votes, by = c("member_id", "congress"))  %>%
   select(party_id, vote_id, vote))
 
 summarizePartyVotes <- function(votesPerIssue) {
-  summary_of_how_parties_voted <- summarise(group_by(votesPerIssue, party_id, vote_id, vote), vote_count = n());
-  summary_of_how_parties_voted <- filter(summary_of_how_parties_voted, vote %in% c("já", "nei"));
-  data <- filter(summary_of_how_parties_voted, party_id == 43);
+  data <- summarise(group_by(votesPerIssue, party_id, vote_id, vote), vote_count = n());
+  data <- filter(summary_of_how_parties_voted, vote %in% c("já", "nei"));
+  #data <- filter(summary_of_how_parties_voted, party_id == 43);
   data$ja <- ifelse(data$vote == "já", data$vote_count, 0);
   data$nei <- ifelse(data$vote == "nei", data$vote_count, 0);
   data <- select(data, "party_id", "vote_id", "ja", "nei");
   DT <- data.table(data);
-  return(DT[, lapply(.SD, sum), by=list(vote_id)]);
+  
 }
 
 party_votes_summary <- summarizePartyVotes(votesPerIssue)
@@ -52,21 +52,22 @@ partyDiscord <- function(yes, no) {
 party_votes_summary$party_discord <- partyDiscord(party_votes_summary$ja, party_votes_summary$nei);
 
 party_votes_summary
-
+DT <- data.table(party_votes_summary);
+#DT[, lapply(.SD, mean), by=list(party_id)]
 #partyDiscord(hello)
   
 # Takes votes of some party in a particular voting session and returns discord for that session.
 # Input: <table> *party_id vote_id vote vote_count* 
 # Output: <float> Discord value from 0.0 to 1.0
 # Example: partyDiscord(party_votes_for_a_session) # => 0.44
-partyDiscord <- function(party_votes_for_a_session) {
-  number_of_yes <- 0;
-  number_of_no <- 0;
-  
-  for(i in 1:nrow(party_votes_for_a_session)) {
-    ifelse (party_votes_for_a_session[i, "vote"] == "já", number_of_yes <- party_votes_for_a_session[i, "vote_count"], number_of_no <- party_votes_for_a_session[i, "vote_count"]);    
-  }
-  total_votes <- number_of_yes + number_of_no;
-  discord <- abs(total_votes - abs(number_of_yes - number_of_no)) / total_votes;
-  return(discord);
-}
+#partyDiscord <- function(party_votes_for_a_session) {
+#  number_of_yes <- 0;
+#  number_of_no <- 0;
+#  
+#  for(i in 1:nrow(party_votes_for_a_session)) {
+#    ifelse (party_votes_for_a_session[i, "vote"] == "já", number_of_yes <- party_votes_for_a_session[i, "vote_count"], number_of_no <- party_votes_for_a_session[i, "vote_count"]);    
+#  }
+#  total_votes <- number_of_yes + number_of_no;
+#  discord <- abs(total_votes - abs(number_of_yes - number_of_no)) / total_votes;
+#  return(discord);
+#}
