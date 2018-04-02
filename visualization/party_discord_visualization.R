@@ -32,19 +32,29 @@ votesPerIssue <- (merge(members, votes, by = c("member_id", "congress"))  %>%
   select(party_id, vote_id, vote))
 
 summarizePartyVotes <- function(votesPerIssue) {
-  summary_of_how_parties_voted <- summarise(group_by(votesPerIssue, party_id, vote_id, vote), vote_count = n())
-  summary_of_how_parties_voted <- filter(summary_of_how_parties_voted, vote %in% c("já", "nei"))
-  data <- filter(summary_of_how_parties_voted, party_id == 43)
-  data$ja <- ifelse(data$vote == "já", data$vote_count, 0)
-  data$nei <- ifelse(data$vote == "nei", data$vote_count, 0)
-  data <- select(data, "party_id", "vote_id", "ja", "nei")
-  DT <- data.table(data)
+  summary_of_how_parties_voted <- summarise(group_by(votesPerIssue, party_id, vote_id, vote), vote_count = n());
+  summary_of_how_parties_voted <- filter(summary_of_how_parties_voted, vote %in% c("já", "nei"));
+  data <- filter(summary_of_how_parties_voted, party_id == 43);
+  data$ja <- ifelse(data$vote == "já", data$vote_count, 0);
+  data$nei <- ifelse(data$vote == "nei", data$vote_count, 0);
+  data <- select(data, "party_id", "vote_id", "ja", "nei");
+  DT <- data.table(data);
   return(DT[, lapply(.SD, sum), by=list(vote_id)]);
 }
 
-summarizePartyVotes(votesPerIssue)
-#partyDiscord(hello)
+party_votes_summary <- summarizePartyVotes(votesPerIssue)
 
+partyDiscord <- function(yes, no) {
+  total_votes <- yes + no;
+  discord <- abs(total_votes - abs(yes - no)) / total_votes;
+  return(discord);
+}
+party_votes_summary$party_discord <- partyDiscord(party_votes_summary$ja, party_votes_summary$nei);
+
+party_votes_summary
+
+#partyDiscord(hello)
+  
 # Takes votes of some party in a particular voting session and returns discord for that session.
 # Input: <table> *party_id vote_id vote vote_count* 
 # Output: <float> Discord value from 0.0 to 1.0
