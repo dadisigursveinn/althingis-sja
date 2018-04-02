@@ -35,10 +35,27 @@ members <- read_csv("../data/members_details.csv") %>%
 votesPerIssue <- (merge(members, votes, by = c("member_id", "congress"))  %>%
   select(party_id, vote_id, vote))
 
-votesPerIssue
-
-party_vote_summary <- summarise(group_by(votesPerIssue, party_id, vote_id, vote), number_of_votes = n())
+# *party_id vote_id vote vote_count*
+party_vote_summary <- summarise(group_by(votesPerIssue, party_id, vote_id, vote), vote_count = n())
 
 party_vote_summary
 
-filter(party_vote_summary, vote_id == 54781 )
+# some_voting_session <- filter(party_vote_summary, vote_id == 54788)
+# votes_of_some_party <- filter(some_voting_session, party_id == 43, vote %in% c("já", "nei"))
+# votes_of_some_party
+
+# Takes votes of some party in a particular voting session and returns discord for that session.
+# Input: *party_id vote_id vote vote_count* 
+# Output: Discord value from 0.0 to 1.0
+# Example: partyDiscord(votes_of_some_party) # => 0.44
+partyDiscord <- function(votes_of_some_party) {
+  number_of_yes <- 0;
+  number_of_no <- 0;
+  
+  for(i in 1:nrow(votes_of_some_party)) {
+    ifelse (votes_of_some_party[i, "vote"] == "já", number_of_yes <- votes_of_some_party[i, "vote_count"], number_of_no <- votes_of_some_party[i, "vote_count"]);    
+  }
+  total_votes <- number_of_yes + number_of_no;
+  discord <- abs(total_votes - abs(number_of_yes - number_of_no)) / total_votes;
+  return(discord);
+}
