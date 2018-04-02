@@ -53,6 +53,8 @@ party_votes_summary$party_discord <- partyDiscord(party_votes_summary$ja, party_
 
 party_votes_summary
 DT <- data.table(party_votes_summary);
+average_party_discord_by_party <- DT[,list(party_discord=mean(party_discord)),by=list(party_id)];
+
 #DT[, lapply(.SD, mean), by=list(party_id)]
 #partyDiscord(hello)
   
