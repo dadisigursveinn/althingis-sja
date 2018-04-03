@@ -83,10 +83,13 @@ party_votes_details <- merge(party_votes, sum_party_votes, by="party_id") %>%
   mutate(percentage=(vote_count/total_vote_count)) %>% 
   mutate(did_vote=ifelse((vote == "já" | vote == "nei"), TRUE, FALSE))
 
-party_votes_details %>% 
+party_votes_participation <- party_votes_details %>% 
   group_by(party_id, abr, did_vote) %>% 
-  summarise(percentage=sum(percentage)) %>%
-  arrange(percentage) %>% 
+  summarise(percentage=sum(percentage))
+
+party_votes_participation <- arrange(party_votes_participation)
+
+party_votes_participation %>% 
   ggplot() +
   geom_bar(mapping = aes(x=abr, y=percentage, fill=did_vote),
            stat="identity") +
