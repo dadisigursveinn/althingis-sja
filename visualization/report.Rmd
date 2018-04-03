@@ -9,16 +9,41 @@ output:
     df_print: paged
 ---
 
-This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+## Concept
+We mean to ascertain how greatly party cohesiveness within þing voting affects the overall success of the party. We will do that by looking at public data from althingi.is. And see how much a given congressperson varies from their political parties voting record. That is to say, how much or little they stray from their own party (using the party's average).
 
-Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+1. Discord within each party based on *yes* versus *no* votes.
+2. Does divergent voting within a party lead to worse election results.
+3. Do left/right congressmen have more consistent voting than congressmen from middle parties.
+
+Our [source](http://www.althingi.is/altext/xml/) is open data from althingi.is database, the data is set up in collections of XML files that do not have a unified standard between them. The first þing that contains data about individual votes is þing nr. 116 (1992) and then there is data for each þing until today. Each þing has around 1500 elections so (32 þing * 1500 elections) * 63 congress persons = 3M observations. Variables for each observation would be, þing nr, case number (málsnúmer), congressperson, party.
+
+
+## Formulas
+
+\[\text{Yes/No Party Discord} = \frac{\left|\text{votes}\:-\:\right|yes-no\left|\right|}{\text{votes}}\]
+
+**The Yes/No Party Discord Formula** ignores everything about a voting session except a party's yes and no votes. The maximum 'yes/no party discord' is a 1. This is returned by the formula when a party has a 50:50 split, which would be very discordial of them, wouldn't you say? 
+
+The minimum is a 0. This is returned by the formula when everyone agrees about either a yes or a no in a party for the voting session in question, because everyone agreeing is as cordial as it gets.
+
+\[\text{Party Harmony} = \frac{\sqrt{(P_{x_1} - Q_{x_1})^2 + (P_{x_2} - Q_{x_2})^2 + (P_{x_3} - Q_{x_3})^2}}{N}\]
+
+**The Party Harmony Formula** has been defined as the euclidean distance between two 3-dimensional points, $P_\text{votes}$ and $Q_\text{disharmony}$. $P_\text{votes}$, divided by the total number of votes. The points look like this
+
+\[P_\text{votes} = (x_1, x_2, x_3)\]
+
+because each variable represents a congress member's possible action during a vote, i.e.
+
+\[P_{votes} = (\text{abstains}, \text{yes}, \text{no})\]
+
+Next let us define $Q_\text{disharmony}$, 'the point of greatest disharmony'. The author's idea of the most extreme disharmony possible for a political party during a voting session, is that the party members will behave as differently as is measurable from one another during a session. So we have equal numbers in each category
+\[Q_\text{disharmony} =  (x_1, x_2, x_3), \text{ where } x_1 = x_2 = x_3 \text{, and } x_1 + x_2 + x_3 = N > 0\]
+
+Thus 'the Party Harmony Formula' looks at a party's voting session and determines literally how far the voting session is from the most disharmonious voting session imaginable.
+
+## Visualization
 
 ```{r}
 plot(cars)
 ```
-
-Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
-
-When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
-
-The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
