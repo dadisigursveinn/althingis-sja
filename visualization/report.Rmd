@@ -9,7 +9,12 @@ output:
     df_print: paged
 ---
 
-## Concept
+## Abstract
+
+## Project discussion
+(answer the whos, the whats, the whys)
+
+### Concept
 We mean to ascertain how greatly party cohesiveness within þing voting affects the overall success of the party. We will do that by looking at public data from althingi.is. And see how much a given congressperson varies from their political parties voting record. That is to say, how much or little they stray from their own party (using the party's average).
 
 1. Discord within each party based on *yes* versus *no* votes.
@@ -19,7 +24,7 @@ We mean to ascertain how greatly party cohesiveness within þing voting affects 
 Our [source](http://www.althingi.is/altext/xml/) is open data from althingi.is database, the data is set up in collections of XML files that do not have a unified standard between them. The first þing that contains data about individual votes is þing nr. 116 (1992) and then there is data for each þing until today. Each þing has around 1500 elections so (32 þing * 1500 elections) * 63 congress persons = 3M observations. Variables for each observation would be, þing nr, case number (málsnúmer), congressperson, party.
 
 
-## Formulas
+### Formulas
 
 \[\text{Yes/No Party Discord} = \frac{\left|\text{votes}\:-\:\right|yes-no\left|\right|}{\text{votes}}\]
 
@@ -42,8 +47,8 @@ Next let us define $Q_\text{disharmony}$, 'the point of greatest disharmony'. Th
 
 Thus 'the Party Harmony Formula' looks at a party's voting session and determines literally how far the voting session is from the most disharmonious voting session imaginable.
 
-## Visualization
+### Visualization
 
-```{r}
-plot(cars)
-```
+## Critique of your successes and failures
+
+## Bibliography and citations
