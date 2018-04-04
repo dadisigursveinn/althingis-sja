@@ -22,11 +22,13 @@ library(data.table)
 # Medium discord would be a fourth of the party disagrees
 # Example: voteDiscord(25.0, 75.0, 100.0) -> Discord of 0.5
 
+parties <- read_csv("../data/parties.csv");
+
 votes <- read_csv("../data/votes.csv") %>% 
-  select(member_id, vote_id, vote, congress )
+  select(member_id, vote_id, vote, congress );
 
 members <- read_csv("../data/members_details.csv") %>%
-  select(member_id, party_id, congress) %>% distinct
+  select(member_id, party_id, congress) %>% distinct;
 
 votesPerIssue <- (merge(members, votes, by = c("member_id", "congress"))  %>%
   select(party_id, vote_id, vote))
@@ -52,4 +54,12 @@ partyDiscord <- function(yes, no) {
 party_votes_summary$party_discord <- partyDiscord(party_votes_summary$ja, party_votes_summary$nei);
 
 DT <- data.table(party_votes_summary);
-average_party_discord_by_party <- DT[,list(party_discord=mean(party_discord)),by=list(party_id)];
+average_party_discord <- merge(DT[,list(party_discord=mean(party_discord)),by=list(party_id)], parties) %>% select("Flokkur" = "abr_long", "Ósammæli" = "party_discord")
+
+
+#counts <- table(average_party_discord$Flokkur)
+discord_values <- average_party_discord$Ósammæli
+party_names <- average_party_discord$Flokkur
+barplot(discord_values, col = c("darkblue", "darkolivegreen3", "blue", "red", "black", "yellow", "orange", "yellow", "darkgreen", rainbow(20)), main="Meðalsundrung atkvæða flokks (m.v. já og nei)", horiz=TRUE,
+        cex.names=0.8, names.arg=party_names, las=1)
+
