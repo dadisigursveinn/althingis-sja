@@ -1,4 +1,4 @@
-rm(list=ls())
+rm(list = ls())
 library(tidyverse)
 library(scales)
 library(lubridate)
@@ -24,13 +24,14 @@ members <- read_csv("../data/members_details.csv") %>%
 
 summarizePartyVotes2d <- function(votesPerIssue) {
   data <- summarise(group_by(votesPerIssue, party_id, vote_id, vote), vote_count = n());
-  data <- filter(data, vote %in% c("já", "nei"));
+  data <- filter(data, vote %in% c("já", "nei", "fjarverandi"));
   #data <- filter(summary_of_how_parties_voted, party_id == 43);
   data$ja <- ifelse(data$vote == "já", data$vote_count, 0);
   data$nei <- ifelse(data$vote == "nei", data$vote_count, 0);
-  data <- select(data, "party_id", "vote_id", "ja", "nei");
+  data$fjarverandi <- ifelse(data$vote == "fjarverandi", data$vote_count, 0);
+  data <- select(data, "party_id", "vote_id", "ja", "nei", "fjarverandi");
   DT <- data.table(data);
-  return(DT[,list(ja=sum(ja),nei=sum(nei)),by=list(party_id, vote_id)]);
+  return(DT[,list(ja=sum(ja),nei=sum(nei),fjarverandi=sum(fjarverandi)),by=list(party_id, vote_id)]);
 }
 
 summarizePartyVotes4d <- function(votesPerIssue) {
@@ -57,13 +58,16 @@ party_votes_4d_summary <- summarizePartyVotes4d(votesPerIssue)
 # KLOFNINGUR FLOKKS / YES, NO SPLIT
 #
 #
-
+0 == 1
 calculate2dHarmonyScore <- function(yes, no) {
-  total_votes <- yes + no;
+  total_votes = yes + no;
+  if(isTRUE(all.equal(total_votes, 0))) {
+    return(1)
+  }
   disHarmony = total_votes / 2; # When N = 6, disH is point (3,3), so then we just use 3
-  harmony <- sqrt((yes - disHarmony)^2 + (no - disHarmony)^2 ) * exp(1) / total_votes;
+  harmony <- sqrt((yes - disHarmony)^2 + (no - disHarmony)^2 ) / total_votes;
   maxHarmony <- (sqrt((total_votes - disHarmony)^2 +(0 - disHarmony)^2 ) / total_votes);
-  harmony <- harmony/maxHarmony
+  harmony <- harmony / maxHarmony
   return(harmony);
 }
 
