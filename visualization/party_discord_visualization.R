@@ -1,3 +1,4 @@
+rm(list=ls())
 library(tidyverse)
 library(scales)
 library(lubridate)
@@ -32,22 +33,24 @@ summarizePartyVotes2d <- function(votesPerIssue) {
   return(DT[,list(ja=sum(ja),nei=sum(nei)),by=list(party_id, vote_id)]);
 }
 
-summarizePartyVotes3d <- function(votesPerIssue) {
+summarizePartyVotes4d <- function(votesPerIssue) {
   data <- summarise(group_by(votesPerIssue, party_id, vote_id, vote), vote_count = n());
-  data <- filter(data, vote %in% c("já", "nei"));
+  data <- filter(data, vote %in% c("já", "nei", "greiðir ekki atkvæði", "fjarverandi"));
   #data <- filter(summary_of_how_parties_voted, party_id == 43);
   data$ja <- ifelse(data$vote == "já", data$vote_count, 0);
   data$nei <- ifelse(data$vote == "nei", data$vote_count, 0);
-  data <- select(data, "party_id", "vote_id", "ja", "nei");
+  data$greidir_ekki_atkvaedi <- ifelse(data$vote == "greiðir ekki atkvæði", data$vote_count, 0);
+  data$fjarverandi <- ifelse(data$vote == "fjarverandi", data$vote_count, 0);
+  data <- select(data, "party_id", "vote_id", "ja", "nei", "greidir_ekki_atkvaedi", "fjarverandi");
   DT <- data.table(data);
-  return(DT[,list(ja=sum(ja),nei=sum(nei)),by=list(party_id, vote_id)]);
+  return(DT[,list(ja=sum(ja),nei=sum(nei),fjarverandi=sum(fjarverandi),greidir_ekki_atkvaedi=sum(greidir_ekki_atkvaedi)),by=list(party_id, vote_id)]);
 }
 
 votesPerIssue <- (merge(members, votes, by = c("member_id", "congress"))  %>%
                     select(party_id, vote_id, vote))
 
 party_votes_2d_summary <- summarizePartyVotes2d(votesPerIssue)
-party_votes_3d_summary <- summarizePartyVotes3d(votesPerIssue)
+party_votes_4d_summary <- summarizePartyVotes4d(votesPerIssue)
 
 
 #
@@ -64,10 +67,10 @@ calculate2dHarmonyScore <- function(yes, no) {
   return(harmony);
 }
 
-calculate3dHarmonyScore <- function(yes, no, abstains) {
-  total_votes <- yes + no + abstains;
-  disHarmony = total_votes / 3; # When N = 6, disH is point (2,2,2), so then we just use 2
-  harmony <- (sqrt((yes - disHarmony)^2 + (no - disHarmony)^2 + (abstains - disHarmony)^2 ) / total_votes);
+calculate4dHarmonyScore <- function(yes, no, abstains, absent) {
+  total_votes <- yes + no + abstains + absent;
+  disHarmony = total_votes / 4; # When N = 8, disH is point (2,2,2,2), so then we just use 2
+  harmony <- (sqrt((yes - disHarmony)^2 + (no - disHarmony)^2 + (abstains - disHarmony)^2 + (yes - disHarmony)^2) / total_votes);
   return(harmony);
 }
 
@@ -77,16 +80,16 @@ calculate3dHarmonyScore <- function(yes, no, abstains) {
 #  return(discord);
 #}
 
-party_votes_2d_summary$party_discord <- calculate2dHarmonyScore(party_votes_2d_summary$ja, party_votes_2d_summary$nei);
+party_votes_2d_summary$harmony <- calculate2dHarmonyScore(party_votes_2d_summary$ja, party_votes_2d_summary$nei);
 
 DT <- data.table(party_votes_2d_summary);
-average_party_discord <- merge(DT[,list(party_discord=mean(party_discord)),by=list(party_id)], parties) %>% select("Flokkur" = "abr_long", "Klofningur" = "party_discord")
+average_harmony <- merge(DT[,list(harmony=mean(harmony)),by=list(party_id)], parties) %>% select("Flokkur" = "abr_long", "Klofningur" = "harmony")
 
-#counts <- table(average_party_discord$Flokkur)
-discord_values <- average_party_discord$Klofningur
+#counts <- table(average_harmony$Flokkur)
+discord_values <- average_harmony$Klofningur
 discord_values <- discord_values * 10 # 100 to make it a percent for nicer presentation
 
-party_names <- average_party_discord$Flokkur # TODO: Correct colours
+party_names <- average_harmony$Flokkur # TODO: Correct colours
 barplot(discord_values, col = c("darkblue", "darkolivegreen3", "blue", "red", "black", "yellow", "orange", "yellow", "darkgreen", rainbow(20)), main="Klofningur innan flokks (1996-2018)", horiz=TRUE,
         cex.names=0.8, names.arg=party_names, las=1)
         mtext(side=1, text="%", line=3, las=0)
@@ -95,7 +98,15 @@ barplot(discord_values, col = c("darkblue", "darkolivegreen3", "blue", "red", "b
 # SUNDURLEITNI FLOKKS / PARTY DISHARMONY
 #
 #
-      
-party_votes_2d_summary$party_discord <- calculate2dHarmonyScore(party_votes_2d_summary$ja, party_votes_2d_summary$nei);
-DT <- data.table(party_votes_2d_summary);
-average_party_discord <- merge(DT[,list(party_discord=mean(party_discord)),by=list(party_id)], parties) %>% select("Flokkur" = "abr_long", "Klofningur" = "party_discord")        
+
+party_votes_4d_summary$harmony <- calculate4dHarmonyScore(party_votes_4d_summary$ja, party_votes_4d_summary$nei, party_votes_4d_summary$greidir_ekki_atkvaedi, party_votes_4d_summary$fjarverandi);
+DT <- data.table(party_votes_4d_summary);
+average_harmony <- merge(DT[,list(harmony=mean(harmony)),by=list(party_id)], parties) %>% select("Flokkur" = "abr_long", "Klofningur" = "harmony")
+
+discord_values <- average_harmony$Klofningur
+discord_values <- discord_values * 10 # 100 to make it a percent for nicer presentation
+
+party_names <- average_harmony$Flokkur # TODO: Correct colours
+barplot(discord_values, col = c("darkblue", "darkolivegreen3", "blue", "red", "black", "yellow", "orange", "yellow", "darkgreen", rainbow(20)), main="Klofningur innan flokks (1996-2018)", horiz=TRUE,
+        cex.names=0.8, names.arg=party_names, las=1)
+mtext(side=1, text="%", line=3, las=0)
