@@ -11,8 +11,8 @@ library(data.table)
 #
 parties <- read_csv("../data/parties.csv");
 votes_combined <- list()
-theListOfAll <- list(121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148)
-#theListOfAll <- list(146, 147, 148);
+#theListOfAll <- list(121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148)
+theListOfAll <- list(146, 147, 148);
 for (i in theListOfAll) {
   filename <- sprintf("../data/votes/votes_%i.csv", i)
   votes_combined <- rbind(votes_combined, read_csv(filename))
@@ -21,7 +21,7 @@ votes <- votes_combined
 members <- read_csv("../data/members_details.csv") %>%
   select(member_id, party_id, congress) %>% distinct;
 
-summarizePartyVotes <- function(votesPerIssue) {
+summarizePartyVotes2d <- function(votesPerIssue) {
   data <- summarise(group_by(votesPerIssue, party_id, vote_id, vote), vote_count = n());
   data <- filter(data, vote %in% c("já", "nei"));
   #data <- filter(summary_of_how_parties_voted, party_id == 43);
@@ -35,7 +35,9 @@ summarizePartyVotes <- function(votesPerIssue) {
 votesPerIssue <- (merge(members, votes, by = c("member_id", "congress"))  %>%
                     select(party_id, vote_id, vote))
 
-party_votes_summary <- summarizePartyVotes(votesPerIssue)
+party_votes_2d_summary <- summarizePartyVotes2d(votesPerIssue)
+
+
 #
 # KLOFNINGUR FLOKKS / YES, NO SPLIT
 #
@@ -63,9 +65,9 @@ calculate3dHarmonyScore <- function(yes, no, abstains) {
 #  return(discord);
 #}
 
-party_votes_summary$party_discord <- calculate2dHarmonyScore(party_votes_summary$ja, party_votes_summary$nei);
+party_votes_2d_summary$party_discord <- calculate2dHarmonyScore(party_votes_2d_summary$ja, party_votes_2d_summary$nei);
 
-DT <- data.table(party_votes_summary);
+DT <- data.table(party_votes_2d_summary);
 average_party_discord <- merge(DT[,list(party_discord=mean(party_discord)),by=list(party_id)], parties) %>% select("Flokkur" = "abr_long", "Klofningur" = "party_discord")
 
 #counts <- table(average_party_discord$Flokkur)
@@ -82,9 +84,6 @@ barplot(discord_values, col = c("darkblue", "darkolivegreen3", "blue", "red", "b
 #
 #
       
-        
-        party_votes_summary$party_discord <- calculate2dHarmonyScore(party_votes_summary$ja, party_votes_summary$nei);
-        
-        DT <- data.table(party_votes_summary);
-        average_party_discord <- merge(DT[,list(party_discord=mean(party_discord)),by=list(party_id)], parties) %>% select("Flokkur" = "abr_long", "Klofningur" = "party_discord")        
-        
+party_votes_2d_summary$party_discord <- calculate2dHarmonyScore(party_votes_2d_summary$ja, party_votes_2d_summary$nei);
+DT <- data.table(party_votes_2d_summary);
+average_party_discord <- merge(DT[,list(party_discord=mean(party_discord)),by=list(party_id)], parties) %>% select("Flokkur" = "abr_long", "Klofningur" = "party_discord")        
