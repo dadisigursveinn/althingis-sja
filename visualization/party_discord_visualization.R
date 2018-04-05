@@ -32,10 +32,22 @@ summarizePartyVotes2d <- function(votesPerIssue) {
   return(DT[,list(ja=sum(ja),nei=sum(nei)),by=list(party_id, vote_id)]);
 }
 
+summarizePartyVotes3d <- function(votesPerIssue) {
+  data <- summarise(group_by(votesPerIssue, party_id, vote_id, vote), vote_count = n());
+  data <- filter(data, vote %in% c("já", "nei"));
+  #data <- filter(summary_of_how_parties_voted, party_id == 43);
+  data$ja <- ifelse(data$vote == "já", data$vote_count, 0);
+  data$nei <- ifelse(data$vote == "nei", data$vote_count, 0);
+  data <- select(data, "party_id", "vote_id", "ja", "nei");
+  DT <- data.table(data);
+  return(DT[,list(ja=sum(ja),nei=sum(nei)),by=list(party_id, vote_id)]);
+}
+
 votesPerIssue <- (merge(members, votes, by = c("member_id", "congress"))  %>%
                     select(party_id, vote_id, vote))
 
 party_votes_2d_summary <- summarizePartyVotes2d(votesPerIssue)
+party_votes_3d_summary <- summarizePartyVotes3d(votesPerIssue)
 
 
 #
