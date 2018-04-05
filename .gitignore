@@ -142,5 +142,6 @@ vignettes/*.pdf
 rsconnect/
 
 visualization/.Rhistory
+visualization/.Rdata
 data/votes/votes_121-148.csv
 .Rproj.user
