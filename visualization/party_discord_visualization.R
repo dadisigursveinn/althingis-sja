@@ -111,6 +111,6 @@ harmony_values <- average_harmony$Klofningur
 harmony_values <- harmony_values * 10 # 100 to make it a percent for nicer presentation
 
 party_names <- average_harmony$Flokkur # TODO: Correct colours
-barplot(harmony_values, col = c("darkblue", "darkolivegreen3", "blue", "red", "black", "yellow", "orange", "yellow", "darkgreen", rainbow(20)), main="Einsleitni flokka (1996-2018)", horiz=TRUE,
+barplot(harmony_values, col = c("darkblue", "darkolivegreen3", "blue", "red", "black", "yellow", "orange", "yellow", "darkgreen", rainbow(20)), main="Einsleitni flokka í atkvæðagreiðslum (1996-2018)", horiz=TRUE,
         cex.names=1.0, names.arg=party_names, las=1)
-mtext(side=1, text="Atkvæðaeinsleitnieinkunn (Harmony Score)", line=3, las=0)
+mtext(side=1, text="Einsleitnieinkunn (Uniformity Score)", line=3, las=0)
