@@ -66,6 +66,16 @@ all_votes <- Reduce(function(x,y) merge(x,y, all=TRUE), list(votes121,
                                                              votes148)) %>% 
   filter(vote != "f: óþekktur kóði") # steingrímur J. 1 vote where he either was 'fjarverandi' or 'boðaði fjarvist'
 
+# reading member details from csv
+members <- read_csv("../data/members_details.csv") %>%
+  select(member_id, party_id, congress) %>% distinct
+
+# reading party details from csv
+
+# mergeing all votes with member data
+all_votes_with_members <- all_votes %>% 
+  merge(members, votes, by = c("member_id", "congress"))
+
 # calculating datetime for each vote
 all_votes$time <- sprintf("%s:%s:%s", all_votes$vote_time_hour, all_votes$vote_time_minute, all_votes$vote_time_second)
 all_votes$date <- sprintf("%s-%s-%s", all_votes$vote_time_year, all_votes$vote_time_month, all_votes$vote_time_date)
