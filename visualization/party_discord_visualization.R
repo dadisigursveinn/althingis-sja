@@ -1,34 +1,30 @@
 library(tidyverse)
 library(scales)
-library(rvest)
 library(lubridate)
 library(readr)
+library(rvest)
 library(data.table)
-# This formula 'voteDiscord' measures the level of discord on a scale of 0 to 1.
-# It does not take into account abstaining votes.
 
-# Reasons why including 'abstinence' would complicate measures of discord:
-
-# 1. Congressman disagrees with his/her party but does not wish to go against it. (cordinal)
-# 2. Congressman does not want to take part because of possible connections to affected parties (neither discordinal nor cordinal).
-# 3. Congressman considers himself/herself too uninformed to make a choice (discordinal).
-
-# Maximum discord would be a total split vote within the party
-# Example: voteDiscord(50.0, 50.0, 100.0) -> Discord of 1
-
-# Minimum discord would be total agreement within the party
-# Example: voteDiscord(100.0, 0.0, 100.0) -> Discord of 0
-
-# Medium discord would be a fourth of the party disagrees
-# Example: voteDiscord(25.0, 75.0, 100.0) -> Discord of 0.5
-
+#
+# INIT
+#
+#
 parties <- read_csv("../data/parties.csv");
-
-votes <- read_csv("../data/votes.csv") %>% 
-  select(member_id, vote_id, vote, congress );
-
+votes_combined <- list()
+# theListOfAll <- list(121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148)
+theListOfAll <- list(146, 147, 148);
+for (i in theListOfAll) {
+  filename <- sprintf("../data/votes/votes_%i.csv", i)
+  votes_combined <- rbind(votes_combined, read_csv(filename))
+}
+votes <- votes_combined
 members <- read_csv("../data/members_details.csv") %>%
   select(member_id, party_id, congress) %>% distinct;
+
+#
+# KLOFNINGUR FLOKKS / YES, NO SPLIT
+#
+#
 
 votesPerIssue <- (merge(members, votes, by = c("member_id", "congress"))  %>%
   select(party_id, vote_id, vote))
@@ -54,12 +50,19 @@ partyDiscord <- function(yes, no) {
 party_votes_summary$party_discord <- partyDiscord(party_votes_summary$ja, party_votes_summary$nei);
 
 DT <- data.table(party_votes_summary);
-average_party_discord <- merge(DT[,list(party_discord=mean(party_discord)),by=list(party_id)], parties) %>% select("Flokkur" = "abr_long", "Ósammæli" = "party_discord")
-
+average_party_discord <- merge(DT[,list(party_discord=mean(party_discord)),by=list(party_id)], parties) %>% select("Flokkur" = "abr_long", "Klofningur" = "party_discord")
 
 #counts <- table(average_party_discord$Flokkur)
-discord_values <- average_party_discord$Ósammæli
-party_names <- average_party_discord$Flokkur
-barplot(discord_values, col = c("darkblue", "darkolivegreen3", "blue", "red", "black", "yellow", "orange", "yellow", "darkgreen", rainbow(20)), main="Meðalsundrung atkvæða flokks (m.v. já og nei)", horiz=TRUE,
-        cex.names=0.8, names.arg=party_names, las=1)
+discord_values <- average_party_discord$Klofningur
+discord_values <- discord_values * 100
 
+party_names <- average_party_discord$Flokkur
+barplot(discord_values, col = c("darkblue", "darkolivegreen3", "blue", "red", "black", "yellow", "orange", "yellow", "darkgreen", rainbow(20)), main="Klofningur innan flokks (1996-2018)", horiz=TRUE,
+        cex.names=0.8, names.arg=party_names, las=1)
+        mtext(side=1, text="%", line=3, las=0)
+        
+        #
+        # SUNDURLEITNI FLOKKS / PARTY DISHARMONY
+        #
+        #
+        
