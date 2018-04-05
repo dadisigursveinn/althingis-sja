@@ -12,8 +12,8 @@ library(data.table)
 #
 parties <- read_csv("../data/parties.csv");
 votes_combined <- list()
-#theListOfAll <- list(121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148)
-theListOfAll <- list(146, 147, 148);
+theListOfAll <- list(121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148)
+#theListOfAll <- list(146, 147, 148);
 for (i in theListOfAll) {
   filename <- sprintf("../data/votes/votes_%i.csv", i)
   votes_combined <- rbind(votes_combined, read_csv(filename))
@@ -90,11 +90,11 @@ DT <- data.table(party_votes_2d_summary);
 average_harmony <- merge(DT[,list(harmony=mean(harmony)),by=list(party_id)], parties) %>% select("Flokkur" = "abr_long", "Klofningur" = "harmony")
 
 #counts <- table(average_harmony$Flokkur)
-discord_values <- average_harmony$Klofningur
-discord_values <- discord_values * 10 # 100 to make it a percent for nicer presentation
+harmony_values <- average_harmony$Klofningur
+harmony_values <- harmony_values * 10 # 100 to make it a percent for nicer presentation
 
 party_names <- average_harmony$Flokkur # TODO: Correct colours
-barplot(discord_values, col = c("darkblue", "darkolivegreen3", "blue", "red", "black", "yellow", "orange", "yellow", "darkgreen", rainbow(20)), main="Klofningur innan flokks (1996-2018)", horiz=TRUE,
+barplot(harmony_values, col = c("darkblue", "darkolivegreen3", "blue", "red", "black", "yellow", "orange", "yellow", "darkgreen", rainbow(20)), main="Klofningur innan flokks (1996-2018)", horiz=TRUE,
         cex.names=0.8, names.arg=party_names, las=1)
         mtext(side=1, text="%", line=3, las=0)
         
@@ -107,10 +107,10 @@ party_votes_4d_summary$harmony <- calculate4dHarmonyScore(party_votes_4d_summary
 DT <- data.table(party_votes_4d_summary);
 average_harmony <- merge(DT[,list(harmony=mean(harmony)),by=list(party_id)], parties) %>% select("Flokkur" = "abr_long", "Klofningur" = "harmony")
 
-discord_values <- average_harmony$Klofningur
-discord_values <- discord_values * 10 # 100 to make it a percent for nicer presentation
+harmony_values <- average_harmony$Klofningur
+harmony_values <- harmony_values * 10 # 100 to make it a percent for nicer presentation
 
 party_names <- average_harmony$Flokkur # TODO: Correct colours
-barplot(discord_values, col = c("darkblue", "darkolivegreen3", "blue", "red", "black", "yellow", "orange", "yellow", "darkgreen", rainbow(20)), main="Samstaða flokka (1996-2018)", horiz=TRUE,
-        cex.names=0.8, names.arg=party_names, las=1)
-mtext(side=1, text="Samstöðueinkunn (Harmony Score)", line=3, las=0)
+barplot(harmony_values, col = c("darkblue", "darkolivegreen3", "blue", "red", "black", "yellow", "orange", "yellow", "darkgreen", rainbow(20)), main="Einsleitni flokka (1996-2018)", horiz=TRUE,
+        cex.names=1.0, names.arg=party_names, las=1)
+mtext(side=1, text="Atkvæðaeinsleitnieinkunn (Harmony Score)", line=3, las=0)
