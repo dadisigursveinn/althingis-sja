@@ -24,14 +24,13 @@ members <- read_csv("../data/members_details.csv") %>%
 
 summarizePartyVotes2d <- function(votesPerIssue) {
   data <- summarise(group_by(votesPerIssue, party_id, vote_id, vote), vote_count = n());
-  data <- filter(data, vote %in% c("já", "nei", "fjarverandi"));
+  data <- filter(data, vote %in% c("já", "nei"));
   #data <- filter(summary_of_how_parties_voted, party_id == 43);
   data$ja <- ifelse(data$vote == "já", data$vote_count, 0);
   data$nei <- ifelse(data$vote == "nei", data$vote_count, 0);
-  data$fjarverandi <- ifelse(data$vote == "fjarverandi", data$vote_count, 0);
-  data <- select(data, "party_id", "vote_id", "ja", "nei", "fjarverandi");
+  data <- select(data, "party_id", "vote_id", "ja", "nei");
   DT <- data.table(data);
-  return(DT[,list(ja=sum(ja),nei=sum(nei),fjarverandi=sum(fjarverandi)),by=list(party_id, vote_id)]);
+  return(DT[,list(ja=sum(ja),nei=sum(nei)),by=list(party_id, vote_id)]);
 }
 
 summarizePartyVotes4d <- function(votesPerIssue) {
@@ -97,6 +96,41 @@ party_names <- average_harmony$Flokkur # TODO: Correct colours
 barplot(harmony_values, col = c("darkblue", "darkolivegreen3", "blue", "red", "black", "yellow", "orange", "yellow", "darkgreen", rainbow(20)), main="Klofningur innan flokks (1996-2018)", horiz=TRUE,
         cex.names=0.8, names.arg=party_names, las=1)
         mtext(side=1, text="%", line=3, las=0)
+
+votes_each_party <-merge(votesPerIssue, parties)
+votesPerIssue %>% 
+  merge(votesPerIssue, parties, by="party_id")
+ggplot(votes_each_party, aes(x=name)) +
+  geom_bar() +
+  coord_flip()
+
+ggplot(average_harmony, aes(fct_reorder(Flokkur, Klofningur), Klofningur, fill=Flokkur)) +
+  geom_bar(stat="identity") +
+  scale_y_continuous(breaks = seq(0,1,by=.1), labels = scales::percent(seq(0,1,by=.1))) +
+  theme_bw()+
+  labs(
+    title = "Same vote score",
+    subtitle="Data for sessions 121 - 148",
+    y = "",
+    x = "Year"
+  ) +
+  scale_fill_manual(values = c('#FF0000',
+                               '#951681',
+                               '#F58B3F',
+                               '#EE4D9B',
+                               '#8EC83E',
+                               '#00BFFF',
+                               '#969696',
+                               '#969696',
+                               '#199094',
+                               '#E1E014',
+                               '#522C7F',
+                               '#DA2128',
+                               '#00ADEF',
+                               '#969696',
+                               '#000000',
+                               '#F6A71D',
+                               '#488E41'))
         
 #
 # SUNDURLEITNI FLOKKS / PARTY DISHARMONY
