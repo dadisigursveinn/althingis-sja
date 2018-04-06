@@ -235,7 +235,7 @@ average_harmony %>%
 # Calculations for 3d
 #
 
-party_votes_3d_summary$harmony <- calculate3dHarmonyScore(party_votes_3d_summary$ja, party_votes_3d_summary$nei);
+party_votes_3d_summary$harmony <- calculate3dHarmonyScore(party_votes_3d_summary$ja, party_votes_3d_summary$nei, party_votes_3d_summary$greidir_ekki_atkvaedi);
 DT <- data.table(party_votes_3d_summary);
 average_harmony <- merge(DT[,list(harmony=mean(harmony)),by=list(party_id, vote_time_year)], parties) %>% select("Flokkur" = "abr_long", "year"="vote_time_year", "Klofningur" = "harmony")
 
@@ -245,12 +245,12 @@ average_harmony %>%
   geom_point() +
   geom_line() +
   #geom_bar(stat="identity") +
-  scale_y_continuous(breaks = seq(0,1,by=.02),
-                     labels = scales::percent(seq(0,1,by=.02)),
+  scale_y_continuous(breaks = seq(0,1,by=.01),
+                     labels = scales::percent(seq(0,1,by=.01)),
                      minor_breaks = 0,
                      expand = c(0,0)) +
   scale_x_continuous(breaks = seq(1996, 2018, 2)) +
-  coord_cartesian(ylim = c(.94, 1)) +
+  coord_cartesian(ylim = c(.81, 1)) +
   theme_bw()+
   theme(axis.text.x = element_text(colour = "black"),
         axis.text.y = element_text(colour = "black")) +
@@ -292,12 +292,12 @@ average_harmony %>%
   geom_point() +
   geom_line() +
   #geom_bar(stat="identity") +
-  scale_y_continuous(breaks = seq(0,1,by=.02),
-                     labels = scales::percent(seq(0,1,by=.02)),
+  scale_y_continuous(breaks = seq(0,1,by=.01),
+                     labels = scales::percent(seq(0,1,by=.01)),
                      minor_breaks = 0,
                      expand = c(0,0)) +
   scale_x_continuous(breaks = seq(1996, 2018, 2)) +
-  coord_cartesian(ylim = c(.94, 1)) +
+  coord_cartesian(ylim = c(.81, 1)) +
   theme_bw()+
   theme(axis.text.x = element_text(colour = "black"),
         axis.text.y = element_text(colour = "black")) +
