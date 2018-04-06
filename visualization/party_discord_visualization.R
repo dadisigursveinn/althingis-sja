@@ -72,13 +72,16 @@ calculate2dHarmonyScore <- function(yes, no) {
 
 calculate4dHarmonyScore <- function(yes, no, abstains, absent) {
   total_votes <- yes + no + abstains + absent;
+  if(isTRUE(all.equal(total_votes, 0))) {
+    return(1)
+  }
   disHarmony = total_votes / 4; # When N = 8, disH is point (2,2,2,2), so then we just use 2
   maxHarmony <- (sqrt((total_votes - disHarmony)^2 + (0 - disHarmony)^2+(0 - disHarmony)^2+(0 - disHarmony)^2 ) / total_votes);
   harmony <- (sqrt((yes - disHarmony)^2 + (no - disHarmony)^2 + (abstains - disHarmony)^2 + (absent - disHarmony)^2) / total_votes);
   harmony <- harmony / maxHarmony
   return(harmony);
 }
-
+calculate4dHarmonyScore(0,0,0,0)
 #calculate2dHarmonyScore <- function(yes, no) {
 #  total_votes <- yes + no;
 #  discord <- abs(total_votes - abs(yes - no)) / total_votes;

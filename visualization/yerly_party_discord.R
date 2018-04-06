@@ -73,6 +73,9 @@ calculate2dHarmonyScore <- function(yes, no) {
 
 calculate4dHarmonyScore <- function(yes, no, abstains, absent) {
   total_votes <- yes + no + abstains + absent;
+  if(isTRUE(all.equal(total_votes, 0))) {
+    return(1)
+  }
   disHarmony = total_votes / 4; # When N = 8, disH is point (2,2,2,2), so then we just use 2
   maxHarmony <- (sqrt((total_votes - disHarmony)^2 +(0 - disHarmony)^2 +(0 - disHarmony)^2 +(0 - disHarmony)^2 ) / total_votes);
   harmony <- (sqrt((yes - disHarmony)^2 + (no - disHarmony)^2 + (abstains - disHarmony)^2 + (absent - disHarmony)^2) / total_votes);
@@ -250,5 +253,48 @@ average_harmony %>%
                                  '#DA2128',
                                  '#00ADEF',
                                  '#969696',
+                                 '#F6A71D',
+                                 '#488E41'))
+
+average_harmony %>% 
+  filter(Flokkur != "Utan þfl.") %>% 
+  filter(Flokkur != "F. fólksins" &
+           Flokkur != "Framsfl." &
+           Flokkur != "Miðfl." &
+           Flokkur != "Píratar" &
+           Flokkur != "Sjálfstfl." &
+           Flokkur != "Viðreisn" &
+           Flokkur != "Samf." &
+           Flokkur != "Vinstri-gr." ) %>%
+  ggplot(aes(year, Klofningur, colour=Flokkur)) +
+  geom_point() +
+  geom_line() +
+  #geom_errorbar(aes(ymin=Klofningur, ymax=Klofningur)) +
+  #geom_point(stat="identity", size=3) +
+  #geom_bar(stat="identity") +
+  scale_y_continuous(breaks = seq(0,1,by=.05),
+                     labels = scales::percent(seq(0,1,by=.05)),
+                     minor_breaks = 0,
+                     expand = c(0,0)) +
+  scale_x_continuous(breaks = seq(1996, 2018, 2)) +
+  coord_cartesian(ylim = c(.55, 1)) +
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, colour = "black"),
+        axis.text.y = element_text(colour = "black")) +
+  labs(
+    title = "Uniformity Score showing parties that are no longer in Althingi",
+    subtitle="Data for sessions 121 - 147",
+    y = "",
+    x = ""
+  ) +
+  scale_colour_manual(values = c('#FF0000',
+                                 '#951681',
+                                 '#F58B3F',
+                                 '#00BFFF',
+                                 '#969696',
+                                 '#969696',
+                                 '#E1E014',
+                                 '#969696',
+                                 '#000000',
                                  '#F6A71D',
                                  '#488E41'))
