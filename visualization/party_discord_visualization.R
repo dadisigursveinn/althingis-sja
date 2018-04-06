@@ -170,11 +170,11 @@ average_harmony %>%
   geom_errorbar(aes(ymin=Klofningur, ymax=Klofningur)) +
   geom_point(stat="identity", size=3) +
   #geom_bar(stat="identity") +
-  scale_y_continuous(breaks = seq(0,1,by=.1),
-                     labels = scales::percent(seq(0,1,by=.1)),
+  scale_y_continuous(breaks = seq(0,1,by=.02),
+                     labels = scales::percent(seq(0,1,by=.02)),
                      minor_breaks = 0,
                      expand = c(0,0)) +
-  coord_cartesian(ylim = c(.6, 1)) +
+  coord_cartesian(ylim = c(.65, 1)) +
   theme_bw()+
   theme(axis.text.x = element_text(angle = 45, hjust = 1, colour = "black"),
         axis.text.y = element_text(colour = "black"),
