@@ -157,10 +157,11 @@ average_harmony %>%
   theme(axis.text.x = element_text(colour = "black"),
         axis.text.y = element_text(colour = "black")) +
   labs(
-    title = "Same vote score",
+    title = "Uniformity score, based on yes and no votes",
     subtitle="Data for sessions 121 - 148",
     y = "",
-    x = ""
+    x = "",
+    colour="Party"
   ) +
   scale_colour_manual(values = c('#FF0000',
                                  '#951681',
@@ -208,10 +209,11 @@ average_harmony %>%
   theme(axis.text.x = element_text(colour = "black"),
         axis.text.y = element_text(colour = "black")) +
   labs(
-    title = "Same vote score for parties that are no longer in Alþingi",
+    title = "Uniformity score, based on yes and no votes, for parties that are no longer in Alþingi",
     subtitle="Data for sessions 121 - 147",
     y = "",
-    x = ""
+    x = "",
+    colour="Party"
   ) +
   scale_colour_manual(values = c('#FF0000',
                                  '#951681',
@@ -247,16 +249,17 @@ average_harmony %>%
                      labels = scales::percent(seq(0,1,by=.02)),
                      minor_breaks = 0,
                      expand = c(0,0)) +
-  coord_cartesian(ylim = c(.65, 1)) +
+  scale_x_continuous(breaks = seq(1996, 2018, 2)) +
+  coord_cartesian(ylim = c(.94, 1)) +
   theme_bw()+
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, colour = "black"),
-        axis.text.y = element_text(colour = "black"),
-        legend.position="none") +
+  theme(axis.text.x = element_text(colour = "black"),
+        axis.text.y = element_text(colour = "black")) +
   labs(
-    title = "3D Uniformity Score",
+    title = "Uniformity Score, based on yes, no and neutral votes",
     subtitle="Data for sessions 121 - 148",
     y = "",
-    x = ""
+    x = "",
+    colour="Party"
   ) +
   scale_colour_manual(values = c('#FF0000',
                                  '#951681',
@@ -294,15 +297,16 @@ average_harmony %>%
                      minor_breaks = 0,
                      expand = c(0,0)) +
   scale_x_continuous(breaks = seq(1996, 2018, 2)) +
-  coord_cartesian(ylim = c(.82, 1)) +
+  coord_cartesian(ylim = c(.94, 1)) +
   theme_bw()+
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, colour = "black"),
+  theme(axis.text.x = element_text(colour = "black"),
         axis.text.y = element_text(colour = "black")) +
   labs(
-    title = "3D Uniformity Score",
+    title = "Uniformity Score, based on yes, no and neutral votes, for parties that are no longer in Alþingi",
     subtitle="Data for sessions 121 - 147",
     y = "",
-    x = ""
+    x = "",
+    colour="Party"
   ) +
   scale_colour_manual(values = c('#FF0000',
                                  '#951681',
@@ -349,15 +353,16 @@ average_harmony %>%
                      minor_breaks = 0,
                      expand = c(0,0)) +
   scale_x_continuous(breaks = seq(1996, 2018, 2)) +
-  coord_cartesian(ylim = c(.55, 1)) +
+  coord_cartesian(ylim = c(.6, 1)) +
   theme_bw()+
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, colour = "black"),
+  theme(axis.text.x = element_text(colour = "black"),
         axis.text.y = element_text(colour = "black")) +
   labs(
-    title = "Uniformity Score",
+    title = "Uniformity Score, based on yes, no and neutral votes and absence",
     subtitle="Data for sessions 121 - 148",
     y = "",
-    x = ""
+    x = "",
+    colour="Party"
   ) +
   scale_colour_manual(values = c('#FF0000',
                                  '#951681',
@@ -397,15 +402,16 @@ average_harmony %>%
                      minor_breaks = 0,
                      expand = c(0,0)) +
   scale_x_continuous(breaks = seq(1996, 2018, 2)) +
-  coord_cartesian(ylim = c(.55, 1)) +
+  coord_cartesian(ylim = c(.65, 1)) +
   theme_bw()+
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, colour = "black"),
+  theme(axis.text.x = element_text(colour = "black"),
         axis.text.y = element_text(colour = "black")) +
   labs(
-    title = "Uniformity Score showing parties that are no longer in Althingi",
+    title = "Uniformity Score, based on yes, no and neutral votes and absence,\n for parties that are no longer in Althingi",
     subtitle="Data for sessions 121 - 147",
     y = "",
-    x = ""
+    x = "",
+    colour="Party"
   ) +
   scale_colour_manual(values = c('#FF0000',
                                  '#951681',

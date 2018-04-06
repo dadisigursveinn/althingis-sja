@@ -153,7 +153,7 @@ ggplot(aes(fct_reorder(Flokkur, Klofningur), Klofningur, colour=Flokkur)) +
         axis.text.y = element_text(colour = "black"),
         legend.position="none") +
   labs(
-    title = "2D Same vote score",
+    title = "Uniformity Score, based on yes and no votes",
     subtitle="Data for sessions 121 - 148",
     y = "",
     x = ""
@@ -193,13 +193,13 @@ average_harmony %>%
                      labels = scales::percent(seq(0,1,by=.02)),
                      minor_breaks = 0,
                      expand = c(0,0)) +
-  coord_cartesian(ylim = c(.65, 1)) +
+  coord_cartesian(ylim = c(.8, 1)) +
   theme_bw()+
   theme(axis.text.x = element_text(angle = 45, hjust = 1, colour = "black"),
         axis.text.y = element_text(colour = "black"),
         legend.position="none") +
   labs(
-    title = "3D Uniformity Score",
+    title = "Uniformity Score, based on yes, no and neutral votes",
     subtitle="Data for sessions 121 - 148",
     y = "",
     x = ""
@@ -254,7 +254,7 @@ average_harmony %>%
         axis.text.y = element_text(colour = "black"),
         legend.position="none") +
   labs(
-    title = "4D Uniformity Score",
+    title = "Uniformity Score, based on yes, no and neutral votes and absence",
     subtitle="Data for sessions 121 - 148",
     y = "",
     x = ""
